@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>קופסת המתנה הוירטואלית 🎁</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== CREATE PAGE ===== -->
+  <div id="createPage" class="page">
+    <header class="hero">
+      <div class="hero-content">
+        <div class="hero-icon">🎁</div>
+        <h1>שלח מתנה וירטואלית</h1>
+        <p>צור קופסת מתנה מיוחדת עם הודעה אישית ושלח לאהובים שלך</p>
+      </div>
+    </header>
+
+    <main class="create-main">
+      <div class="form-card">
+        <h2>יצירת קופסת מתנה</h2>
+
+        <div class="form-group">
+          <label for="recipientName">שם המקבל/ת</label>
+          <input type="text" id="recipientName" placeholder="לדוגמה: דנה, אמא, יוסי..." maxlength="50" />
+        </div>
+
+        <div class="form-group">
+          <label for="message">הודעה אישית</label>
+          <textarea id="message" rows="5" placeholder="כתוב/י הודעה חמה מהלב..." maxlength="500"></textarea>
+          <span class="char-count"><span id="msgCount">0</span>/500</span>
+        </div>
+
+        <div class="form-group">
+          <label>תמונה אישית (אופציונלי)</label>
+          <div class="upload-area" id="uploadArea">
+            <input type="file" id="imageUpload" accept="image/*" hidden />
+            <div class="upload-placeholder" id="uploadPlaceholder">
+              <span class="upload-icon">📷</span>
+              <span>לחץ/י להוספת תמונה</span>
+              <span class="upload-hint">עד 2MB</span>
+            </div>
+            <img id="imagePreview" class="image-preview hidden" alt="תצוגה מקדימה" />
+            <button type="button" class="remove-image hidden" id="removeImage">✕ הסר תמונה</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>סגנון קופסה</label>
+          <div class="style-picker">
+            <label class="style-option">
+              <input type="radio" name="boxStyle" value="red" checked />
+              <span class="style-swatch red-style">
+                <span class="swatch-box"></span>
+                <span class="swatch-name">אדום קלאסי</span>
+              </span>
+            </label>
+            <label class="style-option">
+              <input type="radio" name="boxStyle" value="blue" />
+              <span class="style-swatch blue-style">
+                <span class="swatch-box"></span>
+                <span class="swatch-name">כחול מלכותי</span>
+              </span>
+            </label>
+            <label class="style-option">
+              <input type="radio" name="boxStyle" value="purple" />
+              <span class="style-swatch purple-style">
+                <span class="swatch-box"></span>
+                <span class="swatch-name">סגול קסום</span>
+              </span>
+            </label>
+            <label class="style-option">
+              <input type="radio" name="boxStyle" value="green" />
+              <span class="style-swatch green-style">
+                <span class="swatch-box"></span>
+                <span class="swatch-name">ירוק שמח</span>
+              </span>
+            </label>
+            <label class="style-option">
+              <input type="radio" name="boxStyle" value="gold" />
+              <span class="style-swatch gold-style">
+                <span class="swatch-box"></span>
+                <span class="swatch-name">זהב יוקרתי</span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <button class="btn-create" id="createBtn" type="button">
+          <span>✨ צור את המתנה</span>
+        </button>
+
+        <p id="createError" class="error-msg hidden"></p>
+      </div>
+    </main>
+
+    <!-- Share Modal -->
+    <div class="modal-overlay hidden" id="shareModal">
+      <div class="modal">
+        <button class="modal-close" id="closeModal">✕</button>
+        <div class="modal-icon">🎉</div>
+        <h3>המתנה שלך מוכנה!</h3>
+        <p>שתף את הלינק עם <strong id="shareRecipient"></strong></p>
+
+        <div class="link-box">
+          <input type="text" id="shareLink" readonly />
+          <button class="btn-copy" id="copyBtn">העתק</button>
+        </div>
+
+        <div class="share-buttons">
+          <a class="share-btn whatsapp" id="whatsappShare" target="_blank" rel="noopener">
+            <span>💬</span> WhatsApp
+          </a>
+          <a class="share-btn telegram" id="telegramShare" target="_blank" rel="noopener">
+            <span>✈️</span> Telegram
+          </a>
+        </div>
+
+        <button class="btn-preview" id="previewBtn">👀 צפה במתנה</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== GIFT VIEW PAGE ===== -->
+  <div id="giftPage" class="page hidden">
+    <canvas id="confettiCanvas"></canvas>
+
+    <div class="gift-scene" id="giftScene">
+      <p class="recipient-greeting" id="recipientGreeting"></p>
+
+      <div class="gift-wrapper" id="giftWrapper">
+        <div class="gift-box" id="giftBox">
+          <div class="box-lid" id="boxLid">
+            <div class="lid-front"></div>
+            <div class="lid-top"></div>
+            <div class="lid-left"></div>
+            <div class="lid-right"></div>
+            <div class="ribbon-bow">
+              <div class="bow-left"></div>
+              <div class="bow-right"></div>
+              <div class="bow-center"></div>
+            </div>
+          </div>
+          <div class="box-body" id="boxBody">
+            <div class="body-front"></div>
+            <div class="body-back"></div>
+            <div class="body-left"></div>
+            <div class="body-right"></div>
+            <div class="body-bottom"></div>
+            <div class="ribbon-vertical"></div>
+          </div>
+        </div>
+        <div class="click-hint" id="clickHint">
+          <span class="hint-arrow">👆</span>
+          לחץ/י לפתוח
+        </div>
+      </div>
+
+      <!-- Message card revealed after opening -->
+      <div class="message-card hidden" id="messageCard">
+        <div class="card-inner">
+          <div class="card-stars">✨</div>
+          <p class="card-to" id="cardTo"></p>
+          <div class="card-image-wrap hidden" id="cardImageWrap">
+            <img id="cardImage" alt="תמונה מצורפת" />
+          </div>
+          <p class="card-message" id="cardMessage"></p>
+          <div class="card-footer">
+            <span>💝</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-create-own" id="createOwnBtn">🎁 צור מתנה משלך</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
